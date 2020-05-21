@@ -4,7 +4,6 @@ import { auth } from "../utils/firebase";
 type AuthProviderProps = { children: React.ReactNode };
 
 type AuthContextState = {
-  username: string;
   isAuthenticated: boolean;
   isAuthenticating: boolean;
   handleLogin: (username: string, password: string) => void;
@@ -12,7 +11,6 @@ type AuthContextState = {
 };
 
 const AuthContext = React.createContext<AuthContextState>({
-  username: "",
   isAuthenticated: false,
   isAuthenticating: false,
   handleLogin: () => {},
@@ -20,7 +18,6 @@ const AuthContext = React.createContext<AuthContextState>({
 });
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [username, setUsername] = useState("");
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [isAuthenticating, setAuthenticating] = useState(false);
 
@@ -30,7 +27,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     auth
       .signInWithEmailAndPassword(username, password)
       .then(() => {
-        setUsername(username);
         setAuthenticated(true);
       })
       .catch((err) => console.log(err))
@@ -43,7 +39,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     auth
       .signOut()
       .then(() => {
-        setUsername("");
         setAuthenticated(false);
       })
       .catch((err) => console.log(err))
@@ -52,11 +47,9 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   const onStateChange = (user: firebase.User | null) => {
     if (user && user.email) {
-      setUsername(user.email);
       setAuthenticated(true);
     } else {
       setAuthenticated(false);
-      setUsername('');
     }
   }
 
@@ -70,7 +63,6 @@ function AuthProvider({ children }: AuthProviderProps) {
   return (
     <AuthContext.Provider
       value={{
-        username,
         isAuthenticated,
         isAuthenticating,
         handleLogin,

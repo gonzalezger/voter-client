@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
+import useUser from "../hooks/useUser";
 
 export default function Login() {
   const {
-    username,
     isAuthenticating,
     isAuthenticated,
     handleLogin,
     handleLogout,
   } = useAuth();
+
+  const { username } = useUser();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
