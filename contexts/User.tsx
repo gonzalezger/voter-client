@@ -16,8 +16,9 @@ function UserProvider({ children }: UserProviderProps) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user && user.email) {
-        setUsername(user.email);
+      console.log(user);
+      if (user && user.displayName) {
+        setUsername(user.displayName);
       } else {
         setUsername("");
       }
@@ -27,8 +28,10 @@ function UserProvider({ children }: UserProviderProps) {
     return () => unsubscribe();
   }, []);
 
+  const value = React.useMemo(() => ({ username }), [username]);
+
   return (
-    <UserContext.Provider value={{ username }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={value}>{children}</UserContext.Provider>
   );
 }
 
